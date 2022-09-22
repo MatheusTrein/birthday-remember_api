@@ -7,7 +7,7 @@ interface IAuthConfig {
 
 export default {
   driver: "jwt",
-  tokenExpireInMinutes: 10,
+  tokenExpireInMinutes: 15,
   authSecret: process.env.AUTH_SECRET || "default",
   refreshTokenExpiresInDays: 30,
 } as IAuthConfig;

@@ -18,7 +18,7 @@ export default async function (
     throw new AppError({
       message: "Token is missing",
       statusCode: 401,
-      type: "token.missing",
+      type: "token.invalid",
     });
   }
 

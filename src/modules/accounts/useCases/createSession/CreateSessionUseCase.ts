@@ -104,6 +104,11 @@ class CreateSessionUseCase {
       refreshTokenExpiresInDays
     );
 
+    // const refreshTokenExpiresIn = this.dateProvider.addSeconds(
+    //   this.dateProvider.now(),
+    //   10
+    // );
+
     const refreshToken = await this.refreshTokensRepository.create({
       ip,
       expiresIn: refreshTokenExpiresIn,

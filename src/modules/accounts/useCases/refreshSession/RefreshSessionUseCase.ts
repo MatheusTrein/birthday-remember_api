@@ -34,6 +34,8 @@ class RefreshSessionUseCase {
       refreshTokenId
     );
 
+    console.log(refreshToken);
+
     if (!refreshToken) {
       throw new AppError({
         message: "Invalid refresh token!",
@@ -57,6 +59,8 @@ class RefreshSessionUseCase {
       });
     }
 
+    console.log(refreshTokenIsExpired);
+
     const user = (await this.usersRepository.findById(
       refreshToken.userId
     )) as User;
@@ -74,6 +78,11 @@ class RefreshSessionUseCase {
       new Date(),
       refreshTokenExpiresInDays
     );
+
+    // const newRefreshTokenExpiresIn = this.dateProvider.addSeconds(
+    //   new Date(),
+    //   10
+    // );
 
     await this.refreshTokensRepository.delete(refreshToken.id);
 

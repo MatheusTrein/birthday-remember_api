@@ -68,12 +68,21 @@ class BullQueueProvider implements IQueueProvider {
 
     let bullJob = await queue.bullQueue.getJob(id);
 
-    if (!bullJob) {
-      const bullRepeatableJobs = await queue.bullQueue.getRepeatableJobs();
-      const bullRepeatableJob = bullRepeatableJobs.find((job) => job.id === id);
-      if (!bullRepeatableJob) return;
+    const jobIsAlreadyFinished = !!bullJob?.finishedOn;
 
-      await queue.bullQueue.removeRepeatableByKey(bullRepeatableJob.key);
+    if (!bullJob || jobIsAlreadyFinished) {
+      const bullRepeatableJobs = await queue.bullQueue.getRepeatableJobs();
+      const bullRepeatableJobsFiltered = bullRepeatableJobs.filter(
+        (job) => job.id === id
+      );
+      if (!bullRepeatableJobs) return;
+
+      await Promise.all(
+        bullRepeatableJobsFiltered.map(async (job) => {
+          await queue.bullQueue.removeRepeatableByKey(job.key);
+        })
+      );
+
       return;
     }
 
